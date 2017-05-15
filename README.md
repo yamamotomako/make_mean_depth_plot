@@ -11,7 +11,7 @@ bash ./runall.sh 'path of refGene.txt' 'path of sample name list' 'path of bam d
 <br>
 
 <h3>result</h3>
-Within the path of result directory (you chose in the runall.sh script), two outcomes will be made.<br>
-./result/table.txt -> table of mean depth of all samples.
-./result/result.png -> boxplot of lower depth exome whose mean-depth is under 50 calculated by all samples..
+Within the path of result directory (you chose in the runall.sh script), two outcomes will be made.<br><br>
+./result/table.txt -> table of mean depth of all samples.<br>
+./result/result.png -> boxplot of lower depth exome whose mean-depth is under 50 calculated by all samples.<br>
 
