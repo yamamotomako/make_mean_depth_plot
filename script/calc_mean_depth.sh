@@ -2,7 +2,6 @@
 
 #$ -S /bin/bash
 #$ -cwd
-#$ -o /home/ymako/log -e /home/ymako/log
 
 bamfullpath=$1
 baitfile=$2

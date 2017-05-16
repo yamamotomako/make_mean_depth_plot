@@ -2,7 +2,6 @@
 
 #$ -S /bin/bash
 #$ -cwd
-#$ -o /home/ymako/log -e /home/ymako/log
 
 
 write_usage(){
