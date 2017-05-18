@@ -26,7 +26,11 @@ badBait <- data3$bait
 
 data4 <- data1 %>% filter(bait %in% badBait)
 
+<<<<<<< HEAD
 ggplot(data4, aes(x=bait, y=depth, fill=bait)) + geom_boxplot() + theme(axis.text.x=element_text(angle=90)) + geom_label_repel(show.legend=TRUE)
+=======
+ggplot(data4, aes(x=bait, y=depth, fill=bait)) + geom_boxplot() + theme(axis.text.x=element_text(angle=90))
+>>>>>>> 060ce20899bd18392434292d31f8712883ca951a
 ggsave(save_path)
 
 
