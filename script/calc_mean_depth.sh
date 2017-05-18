@@ -3,19 +3,17 @@
 #$ -S /bin/bash
 #$ -cwd
 
-bamfullpath=$1
-baitfile=$2
-outdir=$3
+outdir=$1
 num=$SGE_TASK_ID
 
 
 samplename=`sed -n ${num}P ${outdir}/sample_list.txt`
-#bamfile=${bamfullpath}"/"${bamkind}"/"`sed -n ${num}P ${outdir}/list.txt`
-bamfile=${bamfullpath}"/"`ls ${bamfullpath} | head -n ${num} | tail -n 1`
+bamfile=`sed -n ${num}P ${outdir}/bam_list.txt`
 
 
-outfile=${outdir}"/calc_depth_result/"${samplename}.tmp
+baitfile=${outdir}"/bait_annotated.bed"
+outfile=${outdir}"/calc_depth_result/"${samplename}
 
 
-python ./calc_mean_depth.py ${bamfile} ${baitfile} ${outdir} ${outfile} ${num}
+depth_tool ${bamfile} ${baitfile} ${outfile}
 

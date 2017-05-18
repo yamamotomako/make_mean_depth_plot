@@ -5,89 +5,96 @@
 
 
 write_usage(){
-	echo ""
-	echo "bash ./runall.sh 'path of refGene.txt' 'path of sample name list' 'path of bam directory' 'path of bait file' 'path of result directory'"
-	echo "(eg). bash ./runall.sh ./refGene.txt ./sample_list.txt ./data/JALSG_bam ./JALSG_sample.bed ./result"
-	echo ""
+    echo ""
+    echo "bash ./runall.sh 'path of refGene.txt' 'path of config.csv' 'path of bait file' 'path of result directory'"
+    echo "(eg). bash ./runall.sh ./refGene.txt ./sample_config.csv ./JALSG_sample.bed ./result"
+    echo ""
 }
 
 
 refgenepath=$1
-samplelist=$2
-bamdir=$3
-baitpath=$4
-outdir=$5
-
-#bamdir="/home/ymako/data/JALSG_bam"
-#baitpath="./038107_D_BED_20120106.bed"
-#outdir="./result"
+configfile=$2
+baitpath=$3
+outdir=$4
 
 
-if [ $# -ne 5 ]; then
-	echo "argument is not enough."
-	write_usage
-	exit
+if [ $# -ne 4 ]; then
+    echo "argument is not enough."
+    write_usage
+    exit
 fi
 
 if [ ! -e ${refgenepath} ]; then
-	echo "${refgenepath} is not existing."
-	write_usage
-	exit
+    echo "${refgenepath} is not existing."
+    write_usage
+    exit
 fi
 
-if [ ! -e ${samplelist} ]; then
-	echo "${samplelist} is not existing."
-	write_usage
-	exit
-fi
-
-if [ ! -e ${bamdir} ]; then
-	echo "${bamdir} is not existing."
-	write_usage
-	exit
+if [ ! -e ${configfile} ]; then
+    echo "${configfile} is not existing."
+    write_usage
+    exit
 fi
 
 if [ ! -e ${baitpath} ]; then
-	echo "${baitpath} is not existing."
-	write_usage
-	exit
+    echo "${baitpath} is not existing."
+    write_usage
+    exit
 fi
 
 
 
-#rm -r -f ${outdir}/tmp_intersect
-#rm -r -f ${outdir}/calc_depth_result
+
+#check python package dependency
+install_pkg_check_1=`pip freeze | grep -c depth-tool`
+if [ ${install_pkg_check_1} -eq 0 ]; then
+    echo "python package depth-tool(0.0.0) is required."
+fi
+
+install_pkg_check_2=`pip freeze | grep -c pybedtools`
+if [ ${install_pkg_check_2} -eq 0 ]; then
+    echo "python package pybedtools(0.7.9) is required."
+fi
+
+
+#make directories
+logdir=${outdir}/log
 
 mkdir -p ${outdir}
-mkdir -p ${outdir}/tmp_intersect
 mkdir -p ${outdir}/calc_depth_result
+mkdir -p ${logdir}
+
 
 #copy sample list for backup
-cp ${samplelist} ${outdir}/sample_list.txt
+configfile_name=`basename ${configfile}`
+cp ${configfile} ${outdir}/${configfile_name}
 
-#listing all bam files
-ls ${bamdir} > ${outdir}/list.txt
+
+#make sample name list
+awk -F "[,]" '{print $1}' ${outdir}/${configfile_name} > ${outdir}/sample_list.txt
+
+#make bam path list
+awk -F "[,]" '{print $2}' ${outdir}/${configfile_name} > ${outdir}/bam_list.txt
 
 
 #count all sample types
-lsnum=`wc -l ${samplelist}`
-lsnum=220
+lsnum=`wc -l ${outdir}/${configfile_name}`
 
 
 #making bait-reference-file
-qsub -N job1 preparation.sh ${refgenepath} ${baitpath} ${outdir}
+qsub -o ${logdir} -e ${logdir} -N prepatation preparation.sh ${refgenepath} ${baitpath} ${outdir}
 
 
 #making intersect file for each bam
-qsub -N job2 -hold_jid job1 -t 1:${lsnum} calc_mean_depth.sh ${bamdir} ${baitpath} ${outdir}
+qsub -o ${logdir} -e ${logdir} -N calc_mean_depth -hold_jid preparation -t 1:${lsnum} calc_mean_depth.sh ${outdir}
 
 
 #making whole intersect file as final result
-qsub -N job3 -hold_jid job2 merge_result.sh ${outdir}
+qsub -o ${logdir} -e ${logdir} -N merge_result -hold_jid calc_mean_depth merge_result.sh ${outdir}
 
 
 #making Rplot
-qsub -N job4 -hold_jid job3 making_r_plot.sh ${outdir}
+qsub -o ${logdir} -e ${logdir} -N make_rplot -hold_jid merge_result making_r_plot.sh ${outdir}
 
 
 exit
