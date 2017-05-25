@@ -2,14 +2,12 @@
 
 <h3>Usage</h3>
 cd ./script<br>
-bash ./runall.sh 'path of refGene.txt' 'path of sample name list' 'path of bam directory' 'path of bait file' 'path of result directory'<br>
+bash ./runall.sh 'path of sample name & bam path list' 'path of bait file' 'path of result directory'<br>
 
 <br>
-(eg). bash ./runall.sh ./refGene.txt ./sample_list.txt ./data/JALSG_bam ./JALSG_sample.bed ./result<br>
+(eg). bash ./runall.sh ./sample_path_list.txt ./JALSG_sample.bed ./result<br>
 
-　refGene.txt：　refGene.txtのパス<br>
-　sample_list.txt：　検体リストのパス<br>
-　./data/JALSG_bam：　bamのパス<br>
+　./sample_path_list.txt：　検体リストとそのbamファイルパス<br>
 　./JALSG_sample.bed：　baitのパス<br>
 　./result：　出力先<br>
 
