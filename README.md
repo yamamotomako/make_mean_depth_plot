@@ -5,7 +5,7 @@ cd ./script<br>
 bash ./runall.sh 'path of sample name & bam path list' 'path of bait file' 'path of result directory'<br>
 
 <br>
-(eg). bash ./runall.sh ./sample_path_list.txt ./JALSG_sample.bed ./result<br>
+(eg). bash ./runall.sh ./sample_path_list.txt ./sample.bed ./result<br>
 
 　./sample_path_list.txt：　検体リストとそのbamファイルパス<br>
 　./sample.bed：　baitのパス<br>
