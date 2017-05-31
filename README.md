@@ -8,7 +8,7 @@ bash ./runall.sh 'path of sample name & bam path list' 'path of bait file' 'path
 (eg). bash ./runall.sh ./sample_path_list.txt ./JALSG_sample.bed ./result<br>
 
 　./sample_path_list.txt：　検体リストとそのbamファイルパス<br>
-　./JALSG_sample.bed：　baitのパス<br>
+　./sample.bed：　baitのパス<br>
 　./result：　出力先<br>
 
 <br>
