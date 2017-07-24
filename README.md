@@ -2,7 +2,7 @@
 
 <h3>Usage</h3>
 cd ./script<br>
-bash ./runall.sh 'path of sample name & bam path list' 'path of bait file' 'path of result directory'<br>
+bash ./runall.sh 'path of sample name & bam path list' 'path of bam file' 'path of result directory'<br>
 
 <br>
 (eg). bash ./runall.sh ./sample_path_list.txt ./sample.bed ./result<br>
