@@ -32,4 +32,17 @@ ggsave(save_path)
 
 
 
+#make summary table sortby chrmsome
+test <- data2 %>% mutate(chrm=substr(bait,1,regexpr(":",bait)-1))
+test2 <- test %>% group_by(chrm) %>% summarize(Mean=mean(MM))
+test3 <- test2 %>% mutate(aaa=as.integer(sub("chr","",chrm))) %>% arrange(aaa)
+as.integer(test3$aaa)
+round(test3$Mean, digit=2)
+
+write.table(test3[c(1,2)], paste0(outdir, "/summary.txt"), row.names = FALSE, quote=FALSE, append=FALSE)
+
+
+
+
+
 
